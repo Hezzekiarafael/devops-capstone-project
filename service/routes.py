@@ -76,7 +76,7 @@ def list_accounts():
 # READ AN ACCOUNT
 ######################################################################
 @app.route("/accounts/<int:account_id>", methods=["GET"])
-def get_accounts(account_id):
+def read_accounts(account_id):  # <--- UBAH DARI get_accounts MENJADI read_accounts
     """
     Reads an Account
     This endpoint will read an Account based the id specified in the path
@@ -87,7 +87,6 @@ def get_accounts(account_id):
         abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
     
     return make_response(jsonify(account.serialize()), status.HTTP_200_OK)
-
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
