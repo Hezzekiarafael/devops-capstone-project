@@ -18,10 +18,13 @@ class DataValidationError(Exception):
 
 
 def init_db(app):
-    """Initialize the SQLAlchemy app"""
-    Account.init_db(app)
-
-
+    """Initializes the SQLAlchemy app"""
+    app.logger.info("Initializing database")
+    Account.app = app
+    if "sqlalchemy" not in app.extensions:
+        db.init_app(app)
+    app.app_context().push()
+    db.create_all()
 ######################################################################
 #  P E R S I S T E N T   B A S E   M O D E L
 ######################################################################
@@ -58,10 +61,10 @@ class PersistentBase:
         """Initializes the database session"""
         logger.info("Initializing database")
         cls.app = app
-        # This is where we initialize SQLAlchemy from the Flask app
-        db.init_app(app)
+        if "sqlalchemy" not in app.extensions:
+            db.init_app(app)
         app.app_context().push()
-        db.create_all()  # make our sqlalchemy tables
+        db.create_all()
 
     @classmethod
     def all(cls):
